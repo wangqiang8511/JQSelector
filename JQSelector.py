@@ -32,7 +32,13 @@ selectStr specification
 [name!="value"]
 [name^="value"]
 [name$="value"]
+'str1, str2,...'
+'str1 > str2'
+'str1 + str2'
+'str1 ~ str2'
+'str1 ~ str2 > str3...'
 """
+
 import re
 from pyquery import PyQuery
 
