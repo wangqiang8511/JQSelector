@@ -37,9 +37,11 @@ import re
 from pyquery import PyQuery
 
 
+# pyquery function expanding
 def listHtml():
     return [PyQuery(el).outerHtml() for i, el in enumerate(this)]
 
+# list all the matched elements in string
 PyQuery.fn.listOuterHtml = listHtml
 
 
@@ -80,41 +82,35 @@ def processSingleSelector(html, selectStr):
     return pelements and pelements.listOuterHtml() or []
 
 
-def processChildSelector(html, selectStr):
-    selectors = [s.strip() for s in selectStr.split(' > ')]
-    pelements = processSimpleSelector(html, selectors[0])
-    return selectChild(pelements, selectors[1])
-
-
 def selectChild(pelements, selectStr):
     """
+    elements = selectChild(pelements, selectStr)
     Select childs according to selectStr
+    @param pelements: input parent elements
+    @param selectStr: JQuery-like select string for child.
+    @return: elements, list of matched elements in PyQuery
     """
     return pelements.children(selectStr)
 
 
-def processNextSelector(html, selectStr):
-    selectors = [s.strip() for s in selectStr.split(' + ')]
-    pelements = processSimpleSelector(html, selectors[0])
-    return selectNext(pelements, selectors[1])
-
-
 def selectNext(pelements, selectStr):
     """
+    elements = selectNext(pelements, selectStr)
     Select the next elements for the given elements.
+    @param pelements: input previous elements
+    @param selectStr: JQuery-like select string for next. 
+    @return: elements, list of matched elements in PyQuery
     """
     return pelements.next()(selectStr)
 
 
-def processSiblingSelector(html, selectStr):
-    selectors = [s.strip() for s in selectStr.split(' ~ ')]
-    pelements = processSimpleSelector(html, selectors[0])
-    return selectSibling(pelements, selectors[1])
-
-
 def selectSibling(pelements, selectStr):
     """
+    elements = selectSibling(pelements, selectStr)
     Select the the siblings
+    @param pelements: input previous elements
+    @param selectStr: JQuery-like select string for siblings. 
+    @return: elements, list of matched elements in PyQuery
     """
     return pelements.siblings(selectStr)
 
@@ -125,7 +121,7 @@ def processSimpleSelector(html, selectStr):
     Implement JQuery-like selecting for a single simple selector
     @param html: input html/xml
     @param selectStr: JQuery-like select string.
-    @return: elements, list of matched elements
+    @return: elements, list of matched elements in PyQuery
     """
     pelements = PyQuery(html)
     return pelements(selectStr)
@@ -135,9 +131,9 @@ def selectByClass(html, classname):
     """
     elements = selectByClass(html, classname)
     select HTML/XML elements by class name.
-    @param classname: class name filter
     @param html: html source
-    @return: elements, list to matched elements
+    @param classname: class name filter
+    @return: elements, list to matched elements in list
     """
     return parseByProperties(html, CLASS=classname)
 
@@ -146,8 +142,8 @@ def selectById(html, id):
     """
     elements = selectById(html, id)
     select HTML/XML elements by id.
-    @param id: id filter
     @param html: html source
+    @param id: id filter
     @return: elements, list to matched elements
     """
     return parseByProperties(html, ID=id)
@@ -157,8 +153,8 @@ def parseByElement(html, elementName):
     """
     elements = parseByElement(html, elementName)
     parse HTML/XML elements by element name.
-    @param elementName: element name filter
     @param html: html source
+    @param elementName: element name filter
     @return: elements, list to matched elements
     """
     pelements = PyQuery(html)
@@ -169,9 +165,9 @@ def parseByTagProperties(html, tagName, **properties):
     """
     elements = parseByTagProperties(html, tagName, **properties)
     parse HTML/XML elements by property pair and tag name.
-    @param properties: property pair
-    @param tagName: tag name
     @param html: html source
+    @param tagName: tag name
+    @param properties: property pair
     @return: elements, list to matched elements
     """
     selector = tagName
@@ -184,8 +180,8 @@ def parseByProperties(html, **properties):
     """
     elements = parseByProperties(html, **properties)
     parse HTML/XML elements by property pair.
-    @param properties: property pair,
     @param html: html source
+    @param properties: property pair,
     @return: elements, list to matched elements
     """
     return parseByTagProperties(html, "", **properties)
@@ -197,6 +193,7 @@ class SelectOperation(object):
     Abstract selectOperation class.
     """
     def performSelector(self, pelements, selectStr):
+        """Perform selection operator"""
         raise NotImplementedError("This is abstract class.")
 
 
@@ -206,6 +203,7 @@ class SelectChildOperation(SelectOperation):
     """
     @classmethod
     def performSelector(cls, pelements, selectStr):
+        """Perform selection operator"""
         return selectChild(pelements, selectStr)
 
 
@@ -215,6 +213,7 @@ class SelectNextOperation(SelectOperation):
     """
     @classmethod
     def performSelector(cls, pelements, selectStr):
+        """Perform selection operator"""
         return selectNext(pelements, selectStr)
 
 
@@ -224,6 +223,7 @@ class SelectSiblingOperation(SelectOperation):
     """
     @classmethod
     def performSelector(cls, pelements, selectStr):
+        """Perform selection operator"""
         return selectSibling(pelements, selectStr)
 
 
@@ -232,6 +232,7 @@ class SelectOperationFactory(object):
     """
     Factory for select operation.
     """
+    # select operation dictionary
     operationDict = {}
     operationDict[' > '] = SelectChildOperation
     operationDict[' + '] = SelectNextOperation
