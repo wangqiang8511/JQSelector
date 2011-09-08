@@ -1,0 +1,17 @@
+JQSelector 1.0
+
+What is this?
+=============
+
+JQSelector implement an HTML/XML selector act like JQuery Selector for python.
+This is developed based on lxml and pyquery. Due to pyquery has not fully support 
+the JQuery selector, e.g. not support the "selector1 + selector2" etc.
+
+- support "selector1 + selector2"
+
+- support "selector1 ~ selector2"
+
+- support "selector1 > selector2"
+
+- support "selector1 + selector2 > selector3 ..."
+
