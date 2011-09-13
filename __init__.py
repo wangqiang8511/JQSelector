@@ -43,4 +43,4 @@ __license__ = 'BSD License'
 
 __all__ = ['JQSelector']
 
-from JQSelector.JQSelector import JQSelect 
+from JQSelector import JQSelect 

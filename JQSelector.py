@@ -45,7 +45,7 @@ from pyquery import PyQuery
 
 # pyquery function expanding
 def listHtml():
-    return [PyQuery(el).outerHtml() for i, el in enumerate(this)]
+    return [str(PyQuery(el)).strip() for i, el in enumerate(this)]
 
 # list all the matched elements in string
 PyQuery.fn.listOuterHtml = listHtml
@@ -66,6 +66,17 @@ def JQSelect(html, selectStr):
         processSingleSelector(html, selector) or []
     return elements
 
+
+def JQSelectPQ(html, selectStr):
+    """
+    pqelements = JQSelect(html, selectStr)
+    Implement JQuery-like selecting function
+    @param html: input html/xml
+    @param selectStr: JQuery-like select string.
+    @return: elements, list of matched elements in PyQuery type
+    """
+    elements = JQSelect(html, selectStr)
+    return [PyQuery(el) for el in elements]
 
 def processSingleSelector(html, selectStr):
     """
